@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "Yard sale — my things looking for a new home",
+    "description": "I'm moving and selling what isn't coming with me. Check the photos and prices, then message me to arrange pickup."
+  },
+  "brand": "Yard sale",
+  "stamp": {
+    "text": "Best price"
+  },
+  "floating": {
+    "whatsapp": "Message on WhatsApp",
+    "call": "Call"
+  },
+  "hero": {
+    "eyebrow": "Join my",
+    "titleLines": [
+      "Yard",
+      "sale"
+    ],
+    "subtitle": "I'm moving and my things are looking for a new home.",
+    "lead": "Everything here has been well looked after and needs a new place before the move. Have a look, pick what suits you and message me — we'll set a day for you to pick it up.",
+    "when": "",
+    "cta": "See what's here"
+  },
+  "steps": [
+    {
+      "title": "Pick",
+      "text": "Browse the items and check the photos and details."
+    },
+    {
+      "title": "Message me",
+      "text": "On WhatsApp or by phone — just tap the item."
+    },
+    {
+      "title": "Arrange pickup",
+      "text": "You collect it on a day and time that works for both of us."
+    }
+  ],
+  "items": {
+    "title": "What's here",
+    "all": "All",
+    "filterLabel": "Filter by category",
+    "empty": "I'm still sorting things out. Check back soon!",
+    "photos": "{n} photos →",
+    "photoAlt": "{title} — photo {i} of {n}",
+    "photosLabel": "Photos of {title}",
+    "sold": "This one found a new owner 💛",
+    "want": "I want this",
+    "call": "Call",
+    "waText": "Hi! I saw \"{title}\" in your garage sale and I'm interested."
+  },
+  "status": {
+    "available": "Available",
+    "reserved": "Reserved",
+    "sold": "Sold"
+  },
+  "price": {
+    "negotiable": "Make an offer",
+    "free": "Free"
+  },
+  "pickup": "Pickup is on you, and payment happens at pickup. If you have questions about size or condition, just ask!",
+  "footer": {
+    "whatsapp": "WhatsApp {phone}",
+    "call": "Call {phone}",
+    "poweredBy": "Powered by"
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "lead": "But the garage sale is right there on the home page.",
+    "cta": "See the items"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "lead": "I couldn't load the page right now.",
+    "retry": "Try again"
+  }
+}

@@ -1,0 +1,598 @@
+/*
+ * Mobile first: o base é celular; telas maiores entram por min-width.
+ * Paleta da referência (stories de yard sale): azul royal, limão e pêssego,
+ * mais um verde só para os preços.
+ * Contraste: limão/azul ≈ 5,7:1 · pêssego/azul ≈ 5:1 · azul/creme ≈ 6,9:1.
+ */
+:root {
+  --blue: #3b4ea3;
+  --blue-deep: #2e3e86;
+  --lime: #e3e86d;
+  --peach: #f6c9b3;
+  --green: #1d8a4e; /* preço; ~4:1 sobre o creme, ok para texto grosso ≥ 19px */
+  --cream: #fbf7dc;
+  --danger: #9b1c1c;
+  --max: 1080px;
+  --radius: 18px;
+  --display: var(--font-display), "Arial Black", Impact, sans-serif;
+  --sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--blue);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+}
+.display {
+  font-family: var(--display);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+}
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+:focus-visible {
+  outline: 3px solid var(--lime);
+  outline-offset: 2px;
+}
+.item :focus-visible,
+.pickup :focus-visible {
+  outline-color: var(--blue);
+}
+
+/* ── Botões (alvo de toque ≥ 44px) ───────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 24px;
+  border: 2px solid var(--lime);
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--blue);
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:disabled {
+  opacity: 0.6;
+  transform: none;
+}
+.btn-outline {
+  background: transparent;
+  color: var(--lime);
+}
+
+/* ── Header / ícones flutuantes / footer ─────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--blue) 94%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid var(--lime);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+}
+/* o canto direito fica livre para os ícones flutuantes; seletor composto para
+   vencer o padding do .container nos breakpoints */
+.site-header .header-inner {
+  padding-right: 124px;
+}
+@media (min-width: 640px) {
+  .site-header .header-inner {
+    padding-right: 136px;
+  }
+}
+.brand {
+  margin-right: auto;
+  line-height: 1.05;
+  font-family: var(--display);
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+.floating {
+  position: fixed;
+  top: 8px;
+  right: 12px;
+  z-index: 40;
+  display: flex;
+  gap: 10px;
+}
+.fab {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--blue);
+  border: 2px solid var(--blue);
+  box-shadow: 0 6px 0 -1px var(--blue-deep);
+  transition: transform 0.15s ease;
+}
+.fab:hover,
+.fab:focus-visible {
+  transform: translateY(-2px) rotate(-6deg);
+}
+.fab-phone {
+  background: var(--peach);
+}
+.fab-wa {
+  background: var(--lime);
+}
+.site-footer {
+  margin-top: 48px;
+  padding: 32px 0 28px;
+  background: var(--blue-deep);
+  text-align: center;
+}
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+.contacts a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.powered {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+}
+.powered img {
+  height: 22px;
+  width: auto;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+main {
+  padding: 20px 0 8px;
+}
+.hero {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stamp {
+  width: 112px;
+  height: 112px;
+  transform: rotate(-8deg);
+}
+.stamp-arc {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--blue);
+}
+.stamp-main {
+  font-family: var(--display);
+  font-size: 15px;
+  text-transform: uppercase;
+  fill: var(--blue);
+}
+.eyebrow {
+  margin: 16px 0 6px;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--lime);
+}
+.hero h1 {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(52px, 15vw, 132px);
+  text-transform: uppercase;
+  color: var(--lime);
+}
+.hero-art {
+  width: min(78%, 340px);
+  height: auto;
+  margin: 20px 0 8px;
+}
+.subtitle {
+  margin: 12px 0 8px;
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--peach);
+}
+.when {
+  margin: 0 0 8px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: var(--peach);
+  color: var(--blue);
+  font-family: var(--display);
+  text-transform: uppercase;
+}
+.lead {
+  margin: 0 0 24px;
+  font-size: 17px;
+  opacity: 0.92;
+}
+
+/* ── Cerquinha ───────────────────────────────────────────────────────────── */
+.fence {
+  height: 56px;
+  margin: 32px -16px 0;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='56'%3E%3Cpath d='M5 12 13 3l8 9v44H5z' fill='%23f6c9b3'/%3E%3C/svg%3E")
+      repeat-x left bottom / 26px 56px,
+    linear-gradient(var(--peach), var(--peach)) 0 24px / 100% 6px no-repeat,
+    linear-gradient(var(--peach), var(--peach)) 0 42px / 100% 6px no-repeat;
+}
+
+/* ── Passos ──────────────────────────────────────────────────────────────── */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 24px 0 0;
+  display: grid;
+  gap: 16px;
+}
+.steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.steps strong {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+.step-n {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--peach);
+  color: var(--blue);
+  font-family: var(--display);
+}
+
+/* ── Seções e categorias ─────────────────────────────────────────────────── */
+.section {
+  padding-top: 44px;
+}
+.section h2 {
+  font-size: clamp(36px, 10vw, 64px);
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 12px;
+}
+.section-lead {
+  margin: 0 0 4px;
+  opacity: 0.92;
+}
+.cats {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.cats button {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lime);
+  font-family: var(--display);
+  font-size: 15px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.cats button::before {
+  content: "•";
+  margin-right: 6px;
+}
+.cats button[aria-pressed="true"] {
+  background: var(--lime);
+  color: var(--blue);
+}
+
+/* ── Itens ───────────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  /* minmax(0, …): sem isso a largura natural das fotos alarga a coluna */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+.item {
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: var(--cream);
+  color: var(--blue);
+  box-shadow: 0 8px 0 -2px var(--blue-deep);
+}
+.media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--peach);
+}
+.photos {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.photos::-webkit-scrollbar {
+  display: none;
+}
+.photos img {
+  flex: none;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  scroll-snap-align: center;
+}
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 13px;
+  text-transform: uppercase;
+  background: var(--peach);
+  color: var(--blue);
+}
+.count {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: var(--cream);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── Item vendido: faixa diagonal, foto em cinza, preço riscado ──────────── */
+.item[data-status="sold"] .photos img {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+.sold-band {
+  position: absolute;
+  top: 50%;
+  left: -25%;
+  right: -25%;
+  transform: translateY(-50%) rotate(-12deg);
+  padding: 8px 0;
+  border-block: 4px solid var(--blue);
+  background: var(--lime);
+  color: var(--blue);
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 8px 0 -3px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+.item[data-status="sold"] .price {
+  color: var(--blue);
+  opacity: 0.55;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+.item[data-status="sold"] .count {
+  display: none;
+}
+.item-sold {
+  margin: 6px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--peach);
+  font-weight: 700;
+  text-align: center;
+}
+.item-body {
+  padding: 14px 6px 6px;
+  display: grid;
+  gap: 8px;
+}
+.item-body h3 {
+  font-size: 22px;
+  line-height: 1.1;
+  overflow-wrap: break-word;
+}
+.item-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+.price {
+  margin: 0 0 0 auto;
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--green);
+}
+.tag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: var(--lime);
+  font-family: var(--display);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+.condition {
+  font-size: 14px;
+  font-weight: 600;
+}
+.prose {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose > :last-child {
+  margin-bottom: 0;
+}
+.prose ul,
+.prose ol {
+  padding-left: 20px;
+}
+.prose a {
+  text-decoration: underline;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.actions .btn {
+  min-height: 44px;
+  font-size: 14px;
+}
+.actions .btn:first-child {
+  flex: 1 1 60%;
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--lime);
+}
+.actions .btn-outline {
+  flex: 1 1 30%;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.pickup {
+  margin: 40px 0 0;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--lime);
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* ── 404 / erro ──────────────────────────────────────────────────────────── */
+.center {
+  padding: 48px 0;
+  text-align: center;
+}
+.center h1 {
+  font-family: var(--display);
+  font-size: 34px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin: 4px 0 12px;
+}
+
+/* ── Telas maiores ───────────────────────────────────────────────────────── */
+@media (min-width: 640px) {
+  .container {
+    padding: 0 24px;
+  }
+  .fence {
+    margin: 40px -24px 0;
+  }
+  .floating {
+    right: max(24px, calc((100vw - var(--max)) / 2 + 24px));
+  }
+  .stamp {
+    width: 136px;
+    height: 136px;
+  }
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .contacts {
+    flex-direction: row;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+@media (min-width: 960px) {
+  main {
+    padding-top: 40px;
+  }
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .fence {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .btn,
+  .fab {
+    transition: none;
+  }
+}
