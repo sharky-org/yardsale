@@ -20,7 +20,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock*
-package-lock.json*
+# o package-lock.json É versionado: fixa as versões entre deploys (sem ele a
+# Vercel resolve tudo na hora e já pegou um pacote recém-publicado com 404).
 
 # typescript
 *.tsbuildinfo
