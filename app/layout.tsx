@@ -24,8 +24,9 @@ const sans = DM_Sans({
 });
 
 /**
- * Metadados em BUILD-TIME. Da meta da Sharky vêm favicon, imagem de OG,
- * palavras-chave e analytics (fail-fast); título e descrição vêm da copy.
+ * Metadados em BUILD-TIME. Da meta da Sharky vêm imagem de OG, palavras-chave
+ * e analytics (fail-fast); título e descrição vêm da copy. O ícone da aba é o
+ * `app/icon.svg` (+ `app/apple-icon.png` para o iPhone), por convenção de arquivo.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await fetchSiteSeo();
@@ -36,7 +37,6 @@ export async function generateMetadata(): Promise<Metadata> {
     title: copy.meta.title,
     description: copy.meta.description,
     ...(seo.keywords.length ? { keywords: seo.keywords } : {}),
-    icons: { icon: seo.favicon ?? "/favicon.ico" },
     alternates: { canonical: "/" },
     openGraph: {
       type: "website",

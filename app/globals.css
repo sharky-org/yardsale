@@ -124,12 +124,20 @@ h3 {
   }
 }
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-right: auto;
   line-height: 1.05;
   font-family: var(--display);
   font-size: 16px;
   text-transform: uppercase;
   color: var(--lime);
+}
+.brand img {
+  flex: none;
+  width: 30px;
+  height: 30px;
 }
 .floating {
   position: fixed;
@@ -243,8 +251,7 @@ main {
 .subtitle {
   margin: 12px 0 8px;
   font-family: var(--display);
-  font-size: 20px;
-  line-height: 1.2;
+  font-size: 26px;
   color: var(--peach);
 }
 .when {
