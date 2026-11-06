@@ -3,7 +3,7 @@
  *
  * Pilares usados na venda de garagem:
  *   1. Meta/SEO + analytics  → resolvidos em BUILD-TIME (fail-fast) para o <head>.
- *   2. Catálogo              → os itens à venda, para /itens.
+ *   2. Catálogo              → os itens à venda: a lista na home e /items/[slug].
  * O blog e o contato do boilerplate foram removidos: não há posts, e o
  * interesse vai direto para o WhatsApp/telefone.
  *
@@ -16,6 +16,7 @@
 import { cache } from "react";
 import {
   Sharky,
+  SharkyError,
   toSeo,
   type ListItemsFilters,
   type SharkyAnalytics,
@@ -180,6 +181,23 @@ export async function fetchCatalogPage(
     return { data: [], total: 0 };
   }
 }
+
+/**
+ * Um item pelo id. `null` só quando a Sharky responde 404 (item removido ou
+ * despublicado → página 404). Outras falhas lançam: no ISR o Next mantém a
+ * versão anterior da página em vez de trocá-la por um 404 falso.
+ */
+export const fetchCatalogItem = cache(
+  async (id: string, locale: string): Promise<ContentItem | null> => {
+    if (!sharky) return null;
+    try {
+      return mapItem(await sharky.getCatalog(id, { locale }));
+    } catch (e) {
+      if (e instanceof SharkyError && e.status === 404) return null;
+      throw e;
+    }
+  },
+);
 
 // ── Coletar TODOS os itens (para sitemap / generateStaticParams) ─────────────
 

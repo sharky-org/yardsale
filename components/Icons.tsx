@@ -1,4 +1,4 @@
-/** Ícones inline (sem dependência): telefone, WhatsApp, mensagem (SMS) e GitHub. */
+/** Ícones inline (sem dependência): telefone, WhatsApp, mensagem (SMS), compartilhar e GitHub. */
 export function PhoneIcon({ size = 24 }: { size?: number }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
@@ -23,6 +23,25 @@ export function ChatIcon({ size = 24 }: { size?: number }) {
         fillRule="evenodd"
         d="M5 3.5h14a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3h-7.2L6.5 22v-4H5a3 3 0 0 1-3-3V6.5a3 3 0 0 1 3-3zM6.6 10.75a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0-2.8 0zm4 0a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0-2.8 0zm4 0a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0-2.8 0z"
       />
+    </svg>
+  );
+}
+
+/** Compartilhar: seta saindo da caixa (o ícone de share do iPhone). */
+export function ShareIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M8 10.5H6.5a1.5 1.5 0 0 0-1.5 1.5v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12a1.5 1.5 0 0 0-1.5-1.5H16" />
     </svg>
   );
 }
