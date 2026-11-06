@@ -1,7 +1,8 @@
-import { PHONE, SHARKY_URL, WHATSAPP, formatPhone } from "@/lib/site";
+import { PHONE, REPO_URL, SHARKY_URL, WHATSAPP, formatPhone } from "@/lib/site";
 import { copy, fill } from "@/lib/copy";
+import { GitHubIcon } from "@/components/Icons";
 
-/** Rodapé: contatos e o "Powered by Sharky". */
+/** Rodapé: contatos, link do código-fonte e o "Powered by Sharky". */
 export default function Footer() {
   const dict = copy.footer;
   return (
@@ -21,6 +22,12 @@ export default function Footer() {
             )}
           </p>
         )}
+        <p className="repo">
+          <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+            <GitHubIcon />
+            {dict.code}
+          </a>
+        </p>
         <a
           className="powered"
           href={SHARKY_URL}

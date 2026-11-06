@@ -184,6 +184,18 @@ h3 {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.repo {
+  margin: 0 0 18px;
+  font-size: 14px;
+}
+.repo a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .powered {
   display: inline-flex;
   align-items: center;
@@ -511,25 +523,39 @@ main {
   text-decoration: underline;
 }
 .actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 8px;
   margin-top: 6px;
 }
-.actions .btn {
-  min-height: 44px;
-  font-size: 14px;
-}
-.actions .btn:first-child {
-  flex: 1 1 60%;
-  background: var(--blue);
-  border-color: var(--blue);
-  color: var(--lime);
-}
-.actions .btn-outline {
-  flex: 1 1 30%;
-  border-color: var(--blue);
+/* ícone sobre o texto: três botões iguais cabem numa linha até em 320px */
+.act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 10px 4px;
+  border: 2px solid var(--blue);
+  border-radius: 14px;
+  background: transparent;
   color: var(--blue);
+  font-family: var(--display);
+  /* encolhe só em telas bem estreitas (320px), onde "WHATSAPP" encostava na borda */
+  font-size: clamp(10px, 3.2vw, 12px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: transform 0.12s ease;
+}
+.act:hover {
+  transform: translateY(-2px);
+}
+.act-wa {
+  background: var(--blue);
+  color: var(--lime);
 }
 
 .pickup {
@@ -599,6 +625,7 @@ main {
     scroll-behavior: auto;
   }
   .btn,
+  .act,
   .fab {
     transition: none;
   }

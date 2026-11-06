@@ -23,6 +23,9 @@ export const PHONE =
 /** Link público da Sharky (rodapé "Powered by"). */
 export const SHARKY_URL = "https://bysharky.com";
 
+/** Código-fonte do site (rodapé), para quem quiser montar a própria venda. */
+export const REPO_URL = "https://github.com/sharky-org/yardsale";
+
 /** Formata dígitos para exibição: BR (55…), EUA (1…) ou genérico (+…). */
 export function formatPhone(digits: string): string {
   const br = digits.match(/^55(\d{2})(\d{4,5})(\d{4})$/);

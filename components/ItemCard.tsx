@@ -1,6 +1,7 @@
 import type { ContentItem } from "@/lib/sharky";
 import { PHONE, WHATSAPP } from "@/lib/site";
 import { copy, fill } from "@/lib/copy";
+import { ChatIcon, PhoneIcon, WhatsAppIcon } from "@/components/Icons";
 import {
   formatPrice,
   getCondition,
@@ -12,8 +13,8 @@ import {
  * Um item da venda, inteiro na lista: fotos (deslizar), título na largura
  * toda, linha com a categoria (etiqueta azul) e o preço à direita, descrição e
  * contato.
- * Não existe página interna: "I want this" abre o WhatsApp já com o nome do
- * item (ou liga, se não houver WhatsApp).
+ * Não existe página interna: três botões de contato — WhatsApp e SMS já com o
+ * nome do item na mensagem, e ligação.
  */
 /** Texto da faixa de vendido, repetido para cobrir a foto de ponta a ponta. */
 const SOLD_BAND = Array.from({ length: 8 }, () => copy.status.sold).join(" ✦ ");
@@ -25,10 +26,13 @@ export default function ItemCard({ item }: { item: ContentItem }) {
   const photos = item.imageUrls.length > 0 ? item.imageUrls : [item.coverUrl];
   const t = copy.items;
 
+  const message = fill(t.message, { title: item.title });
   const wa = WHATSAPP
-    ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
-        fill(t.waText, { title: item.title }),
-      )}`
+    ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`
+    : null;
+  // `?&body=` é a forma que abre a mensagem preenchida no iOS e no Android.
+  const sms = PHONE
+    ? `sms:+${PHONE}?&body=${encodeURIComponent(message)}`
     : null;
 
   return (
@@ -83,13 +87,35 @@ export default function ItemCard({ item }: { item: ContentItem }) {
         ) : (
           <div className="actions">
             {wa && (
-              <a className="btn" href={wa} target="_blank" rel="noreferrer">
-                {t.want}
+              <a
+                className="act act-wa"
+                href={wa}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={fill(t.whatsappLabel, { title: item.title })}
+              >
+                <WhatsAppIcon size={22} />
+                {t.whatsapp}
+              </a>
+            )}
+            {sms && (
+              <a
+                className="act"
+                href={sms}
+                aria-label={fill(t.textLabel, { title: item.title })}
+              >
+                <ChatIcon size={22} />
+                {t.text}
               </a>
             )}
             {PHONE && (
-              <a className={wa ? "btn btn-outline" : "btn"} href={`tel:+${PHONE}`}>
-                {wa ? t.call : t.want}
+              <a
+                className="act"
+                href={`tel:+${PHONE}`}
+                aria-label={fill(t.callLabel, { title: item.title })}
+              >
+                <PhoneIcon size={20} />
+                {t.call}
               </a>
             )}
           </div>

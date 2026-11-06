@@ -29,7 +29,7 @@
     },
     {
       "title": "Message me",
-      "text": "On WhatsApp or by phone — just tap the item."
+      "text": "On WhatsApp, by text or with a call — just tap the item."
     },
     {
       "title": "Arrange pickup",
@@ -45,9 +45,13 @@
     "photoAlt": "{title} — photo {i} of {n}",
     "photosLabel": "Photos of {title}",
     "sold": "This one found a new owner 💛",
-    "want": "I want this",
+    "whatsapp": "WhatsApp",
+    "text": "Text",
     "call": "Call",
-    "waText": "Hi! I saw \"{title}\" in your garage sale and I'm interested."
+    "whatsappLabel": "WhatsApp me about {title}",
+    "textLabel": "Text me about {title}",
+    "callLabel": "Call me about {title}",
+    "message": "Hi! I saw \"{title}\" in your yard sale and I'm interested."
   },
   "status": {
     "available": "Available",
@@ -62,7 +66,8 @@
   "footer": {
     "whatsapp": "WhatsApp {phone}",
     "call": "Call {phone}",
-    "poweredBy": "Powered by"
+    "poweredBy": "Powered by",
+    "code": "Want a site like this? Get the code on GitHub"
   },
   "notFound": {
     "title": "This page doesn't exist",
