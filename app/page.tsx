@@ -1,4 +1,4 @@
-import { fetchAllCatalog } from "@/lib/sharky";
+import { fetchAllCatalog, fetchSiteInfo } from "@/lib/sharky";
 import { getStatus } from "@/lib/garage";
 import { LOCALE, copy } from "@/lib/copy";
 import Board from "@/components/Board";
@@ -10,7 +10,11 @@ export const revalidate = 60; // literal: o Next exige valor estático
 const ORDER = { available: 0, reserved: 1, sold: 2 } as const;
 
 export default async function HomePage() {
-  const all = await fetchAllCatalog(LOCALE);
+  // Nome e descrição do projeto na Sharky são a frase e o texto do topo.
+  const [all, site] = await Promise.all([
+    fetchAllCatalog(LOCALE),
+    fetchSiteInfo(),
+  ]);
   // Disponíveis primeiro, vendidos por último (sort estável mantém a ordem da Sharky).
   const items = [...all].sort(
     (a, b) => ORDER[getStatus(a)] - ORDER[getStatus(b)],
@@ -29,9 +33,9 @@ export default async function HomePage() {
           ))}
         </h1>
         <HeroArt />
-        <p className="subtitle">{copy.hero.subtitle}</p>
+        <p className="subtitle">{site.name}</p>
         {copy.hero.when && <p className="when">{copy.hero.when}</p>}
-        <p className="lead">{copy.hero.lead}</p>
+        {site.description && <p className="lead">{site.description}</p>}
         <a className="btn" href="#items">
           {copy.hero.cta}
         </a>
@@ -51,7 +55,7 @@ export default async function HomePage() {
         ))}
       </ol>
 
-      <Board items={items} />
+      <Board items={items} phone={site.phone} />
 
       <p className="pickup">{copy.pickup}</p>
     </div>

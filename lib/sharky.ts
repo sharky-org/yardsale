@@ -2,7 +2,9 @@
  * Sharky — módulo único de integração do site.
  *
  * Pilares usados na venda de garagem:
- *   1. Meta/SEO + analytics  → resolvidos em BUILD-TIME (fail-fast) para o <head>.
+ *   1. Meta do projeto       → <head> (SEO + analytics) e os dados do site: nome
+ *                              e descrição viram o texto do topo, o telefone vira
+ *                              WhatsApp/SMS/ligação. Fail-fast.
  *   2. Catálogo              → os itens à venda: a lista na home e /items/[slug].
  * O blog e o contato do boilerplate foram removidos: não há posts, e o
  * interesse vai direto para o WhatsApp/telefone.
@@ -22,6 +24,7 @@ import {
   type SharkyAnalytics,
   type SharkyField,
   type SharkyItem,
+  type SharkyMeta,
   type SharkySeo,
 } from "@sharky/sdk";
 
@@ -50,12 +53,38 @@ const sharky = PROJECT_ID
     })
   : null;
 
-// ── Pilar 1: Meta/SEO + analytics (BUILD-TIME, fail-fast) ────────────────────
+// ── Pilar 1: Meta do projeto (SEO, analytics e dados do site; fail-fast) ─────
+
+/** O que o site lê da meta do projeto além do SEO. */
+export type SiteInfo = {
+  /** Nome do projeto: a frase grande do topo da home. */
+  name: string;
+  /** Descrição do projeto: o parágrafo logo abaixo. */
+  description: string | null;
+  /** Primeiro telefone, só dígitos com DDI (WhatsApp, SMS e ligação). */
+  phone: string | null;
+  /** Título do bloco "SEO & Meta", quando preenchido (aba do navegador). */
+  seoTitle: string | null;
+};
+
+// A API manda `phones` (lista); o tipo do SDK 0.8 ainda declara `phone`.
+type RawMeta = SharkyMeta & { phones?: string[] | null };
+
+function toSiteInfo(meta: RawMeta): SiteInfo {
+  const phone = (meta.phones?.[0] ?? meta.phone ?? "").replace(/\D/g, "");
+  return {
+    name: meta.name,
+    description: meta.description?.trim() || null,
+    phone: phone || null,
+    seoTitle: meta.meta?.title?.trim() || null,
+  };
+}
 
 /**
  * Busca a meta do site UMA vez (dedupe via `cache()` do React no mesmo render) e
- * deriva SEO (`toSeo`) + analytics. **Fail-fast, sem fallback:** se a API falhar,
- * lança — e o `next build` quebra (preferimos build vermelho a SEO vazio).
+ * deriva SEO (`toSeo`), analytics e os dados do site. **Fail-fast, sem
+ * fallback:** se a API falhar, lança — e o `next build` quebra (preferimos build
+ * vermelho a SEO vazio).
  */
 const loadSiteMeta = cache(async () => {
   if (!sharky) {
@@ -67,6 +96,7 @@ const loadSiteMeta = cache(async () => {
   return {
     seo: toSeo(meta, { cdnUrl: CDN_URL }),
     analytics: meta.analytics ?? null,
+    site: toSiteInfo(meta),
   };
 });
 
@@ -76,6 +106,10 @@ export async function fetchSiteSeo(): Promise<SharkySeo> {
 
 export async function fetchSiteAnalytics(): Promise<SharkyAnalytics | null> {
   return (await loadSiteMeta()).analytics;
+}
+
+export async function fetchSiteInfo(): Promise<SiteInfo> {
+  return (await loadSiteMeta()).site;
 }
 
 // ── Modelo compartilhado (post e item de catálogo dividem o SharkyItem) ──────

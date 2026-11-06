@@ -50,15 +50,28 @@ so the repo builds on its own with no sibling folders or private registry.
 | `NEXT_PUBLIC_SHARKY_API_URL` | Sharky API base URL (defaults to production). |
 | `NEXT_PUBLIC_SHARKY_CDN_URL` | CDN that serves the item images. |
 | `NEXT_PUBLIC_SITE_URL` | Public URL of the site (canonical URLs, link previews, sitemap, robots). |
-| `NEXT_PUBLIC_WHATSAPP` | Your WhatsApp number, digits only with country code (e.g. `14705551234`). Leave empty to hide WhatsApp. |
-| `NEXT_PUBLIC_PHONE` | Number used for **Text** and **Call**. Optional: falls back to the WhatsApp number. |
+
+Your phone number and the intro text come from the Sharky project, not from
+environment variables (see below).
 
 The build is **fail-fast**: without a valid project ID the site metadata cannot
 be loaded and `next build` stops, so you never ship an empty `<head>`.
 
+## Setting up the Sharky project
+
+Create a Sharky project for the sale. Its own details fill the top of the page
+and the contact buttons:
+
+| In the project | On the site |
+| --- | --- |
+| Name | The big line under "Yard Sale" |
+| Description | The paragraph below it, and the page description for search and link previews |
+| First phone | WhatsApp, **Text** and **Call** on every item, the floating buttons and the footer. Include the country code (e.g. `14705551234` or `+1 470 555 1234`). With no phone, the contact buttons are hidden. |
+| SEO & Meta → Title | Browser tab title. If empty, the site uses `meta.title` from `lib/copy.json`. |
+
 ## Adding items in Sharky
 
-Create a Sharky project for the sale and add each item to its **Catalog**:
+Add each item to the project's **Catalog**:
 
 | In Sharky | On the site |
 | --- | --- |
@@ -74,13 +87,15 @@ Tags and custom field labels are matched case- and accent-insensitively; see
 [`lib/garage.ts`](lib/garage.ts). Instead of tags you can also use a custom
 field named `Status` with the values `Sold` / `Reserved`.
 
-The project's **meta** in Sharky (OG image, keywords, analytics) is baked in at
-build time. Set the project's **Deploy Hook** to redeploy when you save it. The
-items themselves don't need a redeploy.
+The project's **meta** in Sharky (name, description, phone, OG image, keywords,
+analytics) is read when the pages render, so the pages pick up changes when they
+revalidate. Set the project's **Deploy Hook** to redeploy when you save it, so
+everything updates at once. The items themselves don't need a redeploy.
 
 ## Customizing
 
-- **Text:** every interface string lives in [`lib/copy.json`](lib/copy.json). To show
+- **Text:** the intro comes from the Sharky project (above). Every other interface string
+  lives in [`lib/copy.json`](lib/copy.json). To show
   the sale dates and hours at the top, fill in `hero.when` (for example "Sat & Sun · 9am–3pm").
   If you leave it empty, the line doesn't appear.
 - **Colors:** design tokens are at the top of [`app/globals.css`](app/globals.css) (`:root`).

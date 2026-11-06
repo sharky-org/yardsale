@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { ContentItem } from "@/lib/sharky";
-import { PHONE, WHATSAPP } from "@/lib/site";
 import { itemPath } from "@/lib/slug";
 import { copy, fill } from "@/lib/copy";
 import { ChatIcon, PhoneIcon, WhatsAppIcon } from "@/components/Icons";
@@ -18,9 +17,9 @@ const SOLD_BAND = Array.from({ length: 8 }, () => copy.status.sold).join(" ✦ "
 
 /**
  * Um item da venda: foto, título na largura toda, linha com a categoria
- * (etiqueta azul) e o preço à direita, descrição e contato — três botões:
- * WhatsApp e SMS já com o nome do item na mensagem, e ligação. O botão sobre a
- * foto compartilha o link.
+ * (etiqueta azul) e o preço à direita, descrição e contato — três botões para o
+ * telefone do projeto na Sharky: WhatsApp e SMS já com o nome do item na
+ * mensagem, e ligação. O botão sobre a foto compartilha o link.
  *
  * Na lista o card inteiro leva à página do item (`/items/[slug]`): só a capa,
  * descrição cortada com "Show more". A página usa o mesmo card com `detail`:
@@ -28,9 +27,12 @@ const SOLD_BAND = Array.from({ length: 8 }, () => copy.status.sold).join(" ✦ "
  */
 export default function ItemCard({
   item,
+  phone,
   detail = false,
 }: {
   item: ContentItem;
+  /** Só dígitos com DDI; `null` esconde os botões de contato. */
+  phone: string | null;
   detail?: boolean;
 }) {
   const status = getStatus(item);
@@ -43,14 +45,7 @@ export default function ItemCard({
   const path = itemPath(item);
   const Title = detail ? "h1" : "h3";
 
-  const message = fill(t.message, { title: item.title });
-  const wa = WHATSAPP
-    ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`
-    : null;
-  // `?&body=` é a forma que abre a mensagem preenchida no iOS e no Android.
-  const sms = PHONE
-    ? `sms:+${PHONE}?&body=${encodeURIComponent(message)}`
-    : null;
+  const text = encodeURIComponent(fill(t.message, { title: item.title }));
 
   return (
     <article className="item" data-status={status} id={`item-${item.id}`}>
@@ -121,11 +116,11 @@ export default function ItemCard({
         {status === "sold" ? (
           <p className="item-sold">{t.sold}</p>
         ) : (
-          <div className="actions">
-            {wa && (
+          phone && (
+            <div className="actions">
               <a
                 className="act act-wa"
-                href={wa}
+                href={`https://wa.me/${phone}?text=${text}`}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={fill(t.whatsappLabel, { title: item.title })}
@@ -133,28 +128,25 @@ export default function ItemCard({
                 <WhatsAppIcon size={22} />
                 <span className="act-label">{t.whatsapp}</span>
               </a>
-            )}
-            {sms && (
+              {/* `?&body=` é a forma que abre a mensagem preenchida no iOS e no Android. */}
               <a
                 className="act"
-                href={sms}
+                href={`sms:+${phone}?&body=${text}`}
                 aria-label={fill(t.textLabel, { title: item.title })}
               >
                 <ChatIcon size={22} />
                 <span className="act-label">{t.text}</span>
               </a>
-            )}
-            {PHONE && (
               <a
                 className="act"
-                href={`tel:+${PHONE}`}
+                href={`tel:+${phone}`}
                 aria-label={fill(t.callLabel, { title: item.title })}
               >
                 <PhoneIcon size={20} />
                 <span className="act-label">{t.call}</span>
               </a>
-            )}
-          </div>
+            </div>
+          )
         )}
       </div>
     </article>

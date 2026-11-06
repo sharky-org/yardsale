@@ -1,7 +1,6 @@
 {
   "meta": {
-    "title": "Yard sale — my things looking for a new home",
-    "description": "I'm moving and selling what isn't coming with me. Check the photos and prices, then message me to arrange pickup."
+    "title": "Yard sale — my things looking for a new home"
   },
   "brand": "Yard sale",
   "stamp": {
@@ -17,8 +16,6 @@
       "Yard",
       "sale"
     ],
-    "subtitle": "I'm moving and my things are looking for a new home.",
-    "lead": "Everything here has been well looked after and needs a new place before the move. Have a look, pick what suits you and message me — we'll set a day for you to pick it up.",
     "when": "",
     "cta": "See what's here"
   },

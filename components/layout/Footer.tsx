@@ -1,25 +1,21 @@
-import { PHONE, REPO_URL, SHARKY_URL, WHATSAPP, formatPhone } from "@/lib/site";
+import { REPO_URL, SHARKY_URL, formatPhone } from "@/lib/site";
 import { copy, fill } from "@/lib/copy";
 import { GitHubIcon } from "@/components/Icons";
 
 /** Rodapé: contatos, link do código-fonte e o "Powered by Sharky". */
-export default function Footer() {
+export default function Footer({ phone }: { phone: string | null }) {
   const dict = copy.footer;
   return (
     <footer className="site-footer">
       <div className="container">
-        {(WHATSAPP || PHONE) && (
+        {phone && (
           <p className="contacts">
-            {WHATSAPP && (
-              <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noreferrer">
-                {fill(dict.whatsapp, { phone: formatPhone(WHATSAPP) })}
-              </a>
-            )}
-            {PHONE && (
-              <a href={`tel:+${PHONE}`}>
-                {fill(dict.call, { phone: formatPhone(PHONE) })}
-              </a>
-            )}
+            <a href={`https://wa.me/${phone}`} target="_blank" rel="noreferrer">
+              {fill(dict.whatsapp, { phone: formatPhone(phone) })}
+            </a>
+            <a href={`tel:+${phone}`}>
+              {fill(dict.call, { phone: formatPhone(phone) })}
+            </a>
           </p>
         )}
         <p className="repo">

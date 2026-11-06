@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bowlby_One, DM_Sans } from "next/font/google";
 import "./globals.css";
-import { fetchSiteSeo, fetchSiteAnalytics } from "@/lib/sharky";
+import { fetchSiteSeo, fetchSiteAnalytics, fetchSiteInfo } from "@/lib/sharky";
 import { SITE_URL } from "@/lib/site";
 import { LOCALE, copy } from "@/lib/copy";
 import { TrackingScripts } from "@/components/TrackingScripts";
@@ -24,33 +24,36 @@ const sans = DM_Sans({
 });
 
 /**
- * Metadados em BUILD-TIME. Da meta da Sharky vêm imagem de OG, palavras-chave
- * e analytics (fail-fast); título e descrição vêm da copy. O ícone da aba é o
- * `app/icon.svg` (+ `app/apple-icon.png` para o iPhone), por convenção de arquivo.
+ * Metadados da meta da Sharky (fail-fast): descrição (bloco "SEO & Meta" ou a
+ * descrição do projeto), imagem de OG, palavras-chave e analytics. O título é
+ * o do "SEO & Meta"; vazio, fica o da copy — o nome do projeto é a frase do
+ * topo da home, longa demais para a aba. O ícone da aba é o `app/icon.svg`
+ * (+ `app/apple-icon.png` para o iPhone), por convenção de arquivo.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const seo = await fetchSiteSeo();
+  const [seo, site] = await Promise.all([fetchSiteSeo(), fetchSiteInfo()]);
   const images = seo.image ? [seo.image] : undefined;
+  const title = site.seoTitle ?? copy.meta.title;
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: copy.meta.title,
-    description: copy.meta.description,
+    title,
+    description: seo.description,
     ...(seo.keywords.length ? { keywords: seo.keywords } : {}),
     alternates: { canonical: "/" },
     openGraph: {
       type: "website",
       siteName: copy.brand,
       locale: LOCALE.replace("-", "_"),
-      title: copy.meta.title,
-      description: copy.meta.description,
+      title,
+      description: seo.description,
       url: SITE_URL,
       ...(images ? { images } : {}),
     },
     twitter: {
       card: "summary_large_image",
-      title: copy.meta.title,
-      description: copy.meta.description,
+      title,
+      description: seo.description,
       ...(images ? { images } : {}),
     },
   };
@@ -59,9 +62,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const [seo, analytics] = await Promise.all([
+  const [seo, analytics, site] = await Promise.all([
     fetchSiteSeo(),
     fetchSiteAnalytics(),
+    fetchSiteInfo(),
   ]);
   const umami = analytics?.websiteId && analytics?.scriptUrl ? analytics : null;
 
@@ -82,9 +86,9 @@ export default async function RootLayout({
       </head>
       <body>
         <Header />
-        <FloatingContact />
+        <FloatingContact phone={site.phone} />
         <main>{children}</main>
-        <Footer />
+        <Footer phone={site.phone} />
       </body>
     </html>
   );

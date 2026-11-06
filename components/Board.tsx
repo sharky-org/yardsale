@@ -9,7 +9,13 @@ import ItemCard from "@/components/ItemCard";
  * Lista única da venda: filtro por categoria e todos os itens (sem paginação).
  * Só o filtro roda no cliente — a página em si continua estática (SSG + ISR).
  */
-export default function Board({ items }: { items: ContentItem[] }) {
+export default function Board({
+  items,
+  phone,
+}: {
+  items: ContentItem[];
+  phone: string | null;
+}) {
   const [category, setCategory] = useState("");
   const t = copy.items;
 
@@ -52,7 +58,7 @@ export default function Board({ items }: { items: ContentItem[] }) {
       ) : (
         <div className="grid">
           {visible.map((item) => (
-            <ItemCard key={item.id} item={item} />
+            <ItemCard key={item.id} item={item} phone={phone} />
           ))}
         </div>
       )}

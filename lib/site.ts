@@ -1,6 +1,7 @@
 /**
  * Configuração estática do site. Tudo que é "de marca"/infra e não vem da meta
  * da Sharky mora aqui, para que trocar de site seja só mexer em env + esta lib.
+ * O telefone vem da Sharky (`fetchSiteInfo`); aqui só a formatação.
  */
 
 /** URL canônica pública. Usada em metadataBase, sitemap e robots. */
@@ -9,16 +10,6 @@ export const SITE_URL = (
 ).replace(/\/+$/, "");
 
 // ISR: o `export const revalidate = 60` vive na página (o Next só aceita literal).
-
-/** WhatsApp (só dígitos, DDI+DDD+número). Vazio → botão não aparece. */
-export const WHATSAPP = (process.env.NEXT_PUBLIC_WHATSAPP ?? "").replace(
-  /\D/g,
-  "",
-);
-
-/** Telefone para ligação (só dígitos). Sem valor, usa o número do WhatsApp. */
-export const PHONE =
-  (process.env.NEXT_PUBLIC_PHONE ?? "").replace(/\D/g, "") || WHATSAPP;
 
 /** Link público da Sharky (rodapé "Powered by"). */
 export const SHARKY_URL = "https://bysharky.com";

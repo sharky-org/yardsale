@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import {
   fetchAllCatalog,
   fetchCatalogItem,
+  fetchSiteInfo,
   fetchSiteSeo,
   stripHtml,
 } from "@/lib/sharky";
@@ -43,10 +44,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: item.title,
     price: sold ? copy.status.sold : formatPrice(getPrice(item)),
   });
-  const description =
-    stripHtml(item.html).slice(0, 160) || copy.meta.description;
+  const seo = await fetchSiteSeo();
+  const description = stripHtml(item.html).slice(0, 160) || seo.description;
   // O openGraph do filho substitui o do layout inteiro: sem foto, usa a do site.
-  const image = item.coverUrl ?? (await fetchSiteSeo()).image;
+  const image = item.coverUrl ?? seo.image;
   const images = image ? [image] : undefined;
   const path = itemPath(item);
 
@@ -74,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ItemPage({ params }: Props) {
   const { slug } = await params;
-  const item = await loadItem(slug);
+  const [item, site] = await Promise.all([loadItem(slug), fetchSiteInfo()]);
   if (!item) notFound();
   // O título na URL é cosmético: link antigo (título mudou) vai para o atual.
   if (slug !== buildSlug(item)) permanentRedirect(itemPath(item));
@@ -85,7 +86,7 @@ export default async function ItemPage({ params }: Props) {
       <Link className="back" href="/#items">
         {copy.itemPage.back}
       </Link>
-      <ItemCard item={item} detail />
+      <ItemCard item={item} phone={site.phone} detail />
       <p className="pickup">{copy.pickup}</p>
       <p className="more">
         <Link className="btn" href="/#items">
