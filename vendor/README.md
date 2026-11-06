@@ -1,37 +1,31 @@
-# vendor/sharky-sdk-<versão>.tgz
+# vendor/sharky-sdk-<version>.tgz
 
-Pacote `@sharky/sdk` **vendorado** (versionado no repo) em vez de puxado de um
-registry. Isso mantém o garage-sale auto-contido: o build resolve o SDK a
-partir deste `.tgz` (`file:./vendor/sharky-sdk-<versão>.tgz` no `package.json`),
-sem depender de repositório externo, deploy key ou publicação em registry.
+The `@sharky/sdk` package is **vendored** (committed to the repo) instead of
+pulled from a registry. This keeps the project self-contained: the build
+resolves the SDK from this `.tgz` (`file:./vendor/sharky-sdk-<version>.tgz` in
+`package.json`) with no sibling folder, deploy key or registry needed.
 
-Antes, o `package.json` apontava para `file:../sdk` (o pacote irmão no monorepo).
-No Vercel só o repo `garage-sale` é clonado, então `../sdk` resolvia para
-`/vercel/sdk` (inexistente) e o `yarn install` falhava.
+## The file name carries the version
 
-## Importante: o nome do arquivo carrega a versão
+Package managers cache `file:` dependencies aggressively. If you overwrite a
+`.tgz` with **the same name and version**, the old package may be reused from
+the cache and the update never reaches `node_modules`. That's why the file is
+named after its version and `package.json` points to that exact path. Every
+update is a new path that always gets re-resolved.
 
-O yarn v1 cacheia dependências `file:` de forma teimosa: se você sobrescrever um
-`.tgz` mantendo **o mesmo nome e a mesma versão**, ele reusa o pacote antigo do
-cache e a atualização **não** chega ao `node_modules`. Por isso o arquivo é
-nomeado com a versão (`sharky-sdk-0.7.1.tgz`) e o `package.json` aponta para esse
-caminho — cada atualização é um caminho novo que o yarn sempre re-resolve.
-
-## Como atualizar (após mudar o SDK em ../../sdk)
+## Updating the SDK
 
 ```bash
-cd ../sdk
-# 1. bump obrigatório da versão em package.json (ex.: 0.7.1 -> 0.8.0)
-npm run build                                          # gera dist/
-npm pack --pack-destination ../garage-sale/vendor    # gera sharky-sdk-<nova-versão>.tgz
-cd ../garage-sale
-# 2. aponte a dependência para o novo arquivo e remova o antigo
-#    package.json: "@sharky/sdk": "file:./vendor/sharky-sdk-<nova-versão>.tgz"
-rm vendor/sharky-sdk-<versão-antiga>.tgz
-yarn install                                           # atualiza yarn.lock
-npm install --package-lock-only                        # atualiza package-lock.json
+cd path/to/sdk
+# 1. bump the version in the SDK's package.json (e.g. 0.8.0 -> 0.9.0)
+npm run build
+npm pack --pack-destination path/to/yardsale/vendor   # creates sharky-sdk-<new>.tgz
+cd path/to/yardsale
+# 2. point the dependency to the new file and delete the old one
+#    package.json: "@sharky/sdk": "file:./vendor/sharky-sdk-<new>.tgz"
+rm vendor/sharky-sdk-<old>.tgz
+npm install            # updates package-lock.json
 ```
 
-Commit o `.tgz` novo, o `package.json`, o `yarn.lock` e o `package-lock.json`.
-Quando o SDK for publicado num registry, troque a dependência por `^x.y.z` e
-remova esta pasta.
+Commit the new `.tgz`, `package.json` and `package-lock.json`. Once the SDK is
+published to a registry, switch the dependency to `^x.y.z` and remove this folder.
