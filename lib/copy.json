@@ -51,7 +51,17 @@
     "whatsappLabel": "WhatsApp me about {title}",
     "textLabel": "Text me about {title}",
     "callLabel": "Call me about {title}",
-    "message": "Hi! I saw \"{title}\" in your yard sale and I'm interested."
+    "message": "Hi! I saw \"{title}\" in your yard sale and I'm interested.",
+    "shareLabel": "Share the link to {title}",
+    "copied": "Link copied!",
+    "copyPrompt": "Copy this link:",
+    "showMore": "Show more",
+    "showLess": "Show less"
+  },
+  "itemPage": {
+    "metaTitle": "{title} — {price} | Yard sale",
+    "back": "← All items",
+    "more": "See everything for sale"
   },
   "status": {
     "available": "Available",

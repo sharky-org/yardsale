@@ -369,11 +369,13 @@ main {
 /* ── Itens ───────────────────────────────────────────────────────────────── */
 .grid {
   display: grid;
-  /* minmax(0, …): sem isso a largura natural das fotos alarga a coluna */
-  grid-template-columns: minmax(0, 1fr);
-  gap: 20px;
+  /* 2 por linha já no celular; minmax(0, …): sem isso a largura natural das
+     fotos alarga a coluna */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 .item {
+  position: relative;
   min-width: 0;
   padding: 10px;
   border-radius: var(--radius);
@@ -414,6 +416,44 @@ main {
   text-transform: uppercase;
   background: var(--peach);
   color: var(--blue);
+}
+/* compartilhar: canto superior direito da foto (o selo de reservado fica à esquerda) */
+.share {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0 0 2px;
+  border: 2px solid var(--blue);
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--blue);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.share:hover {
+  transform: translateY(-2px);
+}
+.share,
+.share-tip {
+  z-index: 2;
+}
+.share-tip {
+  position: absolute;
+  top: 18px;
+  right: 62px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: var(--cream);
+  font-size: 12px;
+  font-weight: 600;
+}
+.share-tip:empty {
+  display: none;
 }
 .count {
   position: absolute;
@@ -474,10 +514,15 @@ main {
   display: grid;
   gap: 8px;
 }
-.item-body h3 {
+.item-title {
   font-size: 22px;
   line-height: 1.1;
   overflow-wrap: break-word;
+}
+.item-title a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 .item-row {
   display: flex;
@@ -521,6 +566,76 @@ main {
 }
 .prose a {
   text-decoration: underline;
+}
+/* descrição na lista: 4 linhas, com o fim esmaecido quando há mais texto */
+.clamp[data-open="false"] {
+  max-height: 4lh;
+  overflow: hidden;
+}
+.clamp p,
+.clamp ul,
+.clamp ol {
+  margin: 0 0 0.5em;
+}
+.clamp[data-open="false"][data-long="true"] {
+  -webkit-mask-image: linear-gradient(#000 55%, transparent);
+  mask-image: linear-gradient(#000 55%, transparent);
+}
+.more-toggle {
+  min-height: 32px;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Na lista o card inteiro é o link: o ::after do link do título cobre o card,
+   e o que tem clique próprio (compartilhar, show more, contato) fica por cima.
+   z-index explícito: a máscara do texto cortado cria camada própria e, sem
+   ele, pintaria por cima do link. */
+.card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: var(--radius);
+}
+.card-link:focus-visible {
+  outline: none;
+}
+.card-link:focus-visible::after {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}
+.more-toggle,
+.actions {
+  position: relative;
+  z-index: 2;
+}
+/* contato sempre no pé do card: os botões alinham na linha mesmo com textos
+   de tamanhos diferentes */
+.grid .item {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.12s ease;
+}
+.grid .item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.grid .actions,
+.grid .item-sold {
+  margin-top: auto;
+}
+.grid .item:has(.card-link:hover) {
+  transform: translateY(-3px);
 }
 .actions {
   display: grid;
@@ -567,6 +682,127 @@ main {
   font-weight: 600;
 }
 
+/* ── Lista no celular: 2 por linha, tudo menor ─────────────────────────────
+   Exceção ao mobile first: o tamanho normal vale para a página do item e para
+   telas maiores, então aqui só encolhe a lista abaixo de 640px. */
+@media (max-width: 639px) {
+  .grid .item {
+    padding: 6px;
+    border-radius: 14px;
+    box-shadow: 0 6px 0 -2px var(--blue-deep);
+  }
+  .grid .card-link::after {
+    border-radius: 14px;
+  }
+  .grid .media {
+    border-radius: 10px;
+  }
+  .grid .photos img {
+    aspect-ratio: 1;
+  }
+  .grid .item-body {
+    padding: 8px 2px 2px;
+    gap: 6px;
+  }
+  .grid .item-title {
+    font-size: 14px;
+  }
+  .grid .item-row {
+    gap: 4px 6px;
+  }
+  .grid .price {
+    font-size: 14px;
+  }
+  .grid .tag {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+  .grid .condition {
+    font-size: 11px;
+  }
+  .grid .prose {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .grid .more-toggle {
+    font-size: 12px;
+  }
+  /* só o ícone: o nome do botão continua no aria-label */
+  .grid .act-label {
+    display: none;
+  }
+  .grid .actions {
+    gap: 4px;
+  }
+  .grid .act {
+    min-height: 40px;
+    padding: 6px 0;
+    border-radius: 10px;
+  }
+  .grid .item-sold {
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+  .grid .sold-band {
+    padding: 4px 0;
+    border-block-width: 3px;
+    font-size: 12px;
+  }
+  .grid .badge {
+    top: 6px;
+    left: 6px;
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+  .grid .count {
+    right: 6px;
+    bottom: 6px;
+    padding: 1px 7px;
+    font-size: 10px;
+  }
+  .grid .share {
+    top: 6px;
+    right: 6px;
+    width: 34px;
+    height: 34px;
+  }
+  .grid .share svg {
+    width: 17px;
+    height: 17px;
+  }
+  .grid .share-tip {
+    top: 12px;
+    right: 46px;
+    font-size: 10px;
+  }
+}
+
+/* ── Página de um item ───────────────────────────────────────────────────── */
+.item-page {
+  max-width: 720px;
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 8px;
+  font-family: var(--display);
+  font-size: 15px;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+.item-page .item-title {
+  font-size: clamp(28px, 8vw, 40px);
+}
+.item-page .pickup {
+  margin-top: 24px;
+}
+.more {
+  margin: 28px 0 0;
+  text-align: center;
+}
+
 /* ── 404 / erro ──────────────────────────────────────────────────────────── */
 .center {
   padding: 48px 0;
@@ -600,7 +836,7 @@ main {
     grid-template-columns: repeat(3, 1fr);
   }
   .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
   }
   .contacts {
     flex-direction: row;
@@ -626,6 +862,8 @@ main {
   }
   .btn,
   .act,
+  .share,
+  .grid .item,
   .fab {
     transition: none;
   }
